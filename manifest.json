@@ -1,11 +1,11 @@
 {
 "update_url":"http://clients2.google.com/service/update2/crx",
-  "name": "Time spend on Facebook",
+  "name": "Time On Facebook",
   "version": "0.33",
   "description": "Tracks the time you spend on Facebook per day.",
   "manifest_version": 2,
   "background": {
-    "scripts": ["script.js"]
+    "scripts": ["messageListener.js"]
   },
 
   "permissions": [
@@ -22,7 +22,7 @@
 
   "content_scripts": [{
     "matches": ["*://*.facebook.com/*"],
-	"js": ["time_tracking.js"],
+	"js": ["tabs.js"],
 	"run_at": "document_end",
 	"all_frames": false
   }]

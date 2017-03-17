@@ -9,7 +9,7 @@ var FbExtension = {
 		// this.list.className = "_2s25";
 		this.link = document.createElement('a');
 		this.link.className = "_2s25";
-
+		
 		this.link.href = "#";
 		this.link.innerHTML = 'wait..';
 		// this.list.appendChild(this.link);
@@ -38,9 +38,12 @@ var FbExtension = {
 
 		this.totalSecounds = data.secounds || 0;
 		this.lastTimestamp = data.date || this.getTimestamp();
-
-		setInterval(this.trackTime.bind(this), 1000);
 		// window.addEventListener('unload', FbExtension.onWindowClose.bind(FbExtension), false);
+
+		var trackId = window.setInterval(this.trackTime.bind(this), 1000);
+
+		window.addEventListener('blur', function () {window.clearInterval(trackId)});
+		window.addEventListener('focus', function (){trackId = window.setInterval(FbExtension.trackTime.bind(FbExtension), 1000)});
 	},
 	trackTime: function() {
 		var currentTimestamp;
@@ -59,7 +62,7 @@ var FbExtension = {
 			userName: this.userName
 		});
 
-		this.updateClock();
+		this.updateClock.bind(this)();
 	},
 	updateClock: function() {
 		var hours,minutes,secounds;
@@ -83,4 +86,4 @@ var FbExtension = {
 		].join('');
 	}
 };
-FbExtension.initiate();
+FbExtension.initiate()

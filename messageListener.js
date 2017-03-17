@@ -10,6 +10,14 @@ chrome.extension.onMessage.addListener(
 			localStorage['date'] = request.date;
 			localStorage['userName'] = request.userName;
 		}
+		if ( request.action == 'trackTime?'){
+			if (localStorage['tracking']){
+				sendResponse(false);
+			} else {
+				localStorage['tracking'] = true;
+				sendResponse(true);
+			}
+		}
 	}
 );
 
