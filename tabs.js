@@ -42,7 +42,10 @@ var FbExtension = {
 
 		var trackId = window.setInterval(this.trackTime.bind(this), 1000);
 
+		// blur: when tab stops being open, halts tracking time
 		window.addEventListener('blur', function () {window.clearInterval(trackId)});
+
+		// start tracking time again when tab is opened again
 		window.addEventListener('focus', function (){trackId = window.setInterval(FbExtension.trackTime.bind(FbExtension), 1000)});
 	},
 	trackTime: function() {
