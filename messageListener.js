@@ -1,12 +1,15 @@
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if (request.action == 'load') {
-			var time = parseInt(localStorage['seconds']);
-			var date = localStorage['date'];
-			sendResponse({secounds: time, date: date});
+			sendResponse({
+				seconds: parseInt(localStorage['seconds']), 
+				date: localStorage['date'],
+				yesterdayTotalSeconds: localStorage['yesterdayTotalSeconds']
+			});
 		}
 		if( request.action == 'save') {
-			localStorage['seconds'] = request.secounds;
+			localStorage['seconds'] = request.seconds;
+			localStorage['yesterdayTotalSeconds'] = request.yesterdayTotalSeconds;
 			localStorage['date'] = request.date;
 			localStorage['userName'] = request.userName;
 		}

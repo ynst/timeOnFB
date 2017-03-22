@@ -1,5 +1,5 @@
 var FbExtension = {
-	totalSecounds: 0,
+	totalSeconds: 0,
 	yesterdayTotalSeconds: 0,
 	lastTimestamp: 0,
 	list: null,
@@ -37,10 +37,10 @@ var FbExtension = {
 		chrome.extension.sendMessage({action: 'load'}, this.loaded.bind(this));
 	},
 	loaded: function(data) {
-		console.log('data recieved');
+		console.log('data received');
 		console.log(data);
 
-		this.totalSecounds = data.secounds || 0;
+		this.totalSeconds = data.seconds || 0;
 		this.lastTimestamp = data.date || this.getTimestamp();
 		this.yesterdayTotalSeconds = data.yesterdayTotalSeconds || 0;
 		// window.addEventListener('unload', FbExtension.onWindowClose.bind(FbExtension), false);
@@ -51,23 +51,31 @@ var FbExtension = {
 		window.addEventListener('blur', function () {window.clearInterval(trackId)});
 
 		// start tracking time again when tab is opened again
-		window.addEventListener('focus', function (){trackId = window.setInterval(FbExtension.trackTime.bind(FbExtension), 1000)});
+		window.addEventListener('focus', function () {trackId = window.setInterval(FbExtension.trackTime.bind(FbExtension), 1000)});
 	},
 	trackTime: function() {
+		console.log("#################");
+		// num of posts
+		console.log(($("html").html().match(/UFILikeLink/g)  || []).length); 
+
+		// num of liked posts
+		console.log(($("html").html().match(/UFILinkBright/g)  || []).length); 
+		console.log("#################");
+
 		var currentTimestamp;
 
 		// day turn
 		if( (currentTimestamp = this.getTimestamp()) != this.lastTimestamp ) {
-			this.yesterdayTotalSeconds = this.totalSecounds;
-			this.totalSecounds = 0;
+			this.yesterdayTotalSeconds = this.totalSeconds;
+			this.totalSeconds = 0;
 		}
 
-		this.totalSecounds++;
+		this.totalSeconds++;
 		this.lastTimestamp = currentTimestamp;
 
 		chrome.extension.sendMessage({
 			action: 'save', 
-			secounds: this.totalSecounds, 
+			seconds: this.totalSeconds, 
 			yesterdayTotalSeconds: this.yesterdayTotalSeconds,
 			date: this.lastTimestamp, 
 			userName: this.userName
@@ -76,7 +84,7 @@ var FbExtension = {
 		this.updateClock.bind(this)();
 	},
 	updateClock: function() {
-		this.link.innerHTML = this.htmlTime(this.totalSecounds);
+		this.link.innerHTML = this.htmlTime(this.totalSeconds);
 		this.yesterdayTimeDisplay.innerHTML = this.htmlTime(this.yesterdayTotalSeconds);
 	},
 	getTimestamp: function() {
@@ -88,17 +96,17 @@ var FbExtension = {
 		].join('');
 	},
 	htmlTime: function(seconds){
-		var hours,minutes,secounds;
+		var hours,minutes,seconds;
 
 		hours = Math.floor(seconds / 3600);
 		minutes = Math.floor( (seconds - hours*3600) / 60 );
-		secounds = seconds - minutes*60 - hours*3600;
+		seconds = seconds - minutes*60 - hours*3600;
 
 		if( hours < 10 ) hours = "0"+hours;
 		if( minutes < 10 ) minutes = "0"+minutes;
-		if( secounds < 10 ) secounds = "0"+secounds;
+		if( seconds < 10 ) seconds = "0"+seconds;
 
-		return hours+":"+minutes+":"+secounds;
+		return hours+":"+minutes+":"+seconds;
 	}
 };
 FbExtension.initiate()

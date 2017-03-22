@@ -12,8 +12,6 @@
 	"tabs", "*://*.facebook.com/*"
   ],
 
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
@@ -22,7 +20,7 @@
 
   "content_scripts": [{
     "matches": ["*://*.facebook.com/*"],
-	"js": ["tabs.js"],
+	"js": ["jquery-3.2.0.min.js", "tabs.js"],
 	"run_at": "document_end",
 	"all_frames": false
   }]
